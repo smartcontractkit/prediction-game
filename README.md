@@ -6,7 +6,7 @@
 
 This project has been developed for educational purposes only and is not meant to be used for gambling.
 
-This project demostrates how to build a smart contract based application using real-time sports data via [Chainlink Functions](https://docs.chain.link/chainlink-functions).
+This project demostrates how to build a smart contract based application using real time sports data via [Chainlink Functions](https://docs.chain.link/chainlink-functions).
 
 Additionally, the project showcases how to send automatic payouts using [Chainlink Automation](https://chain.link/automation) and how to transfer tokens cross-chain using [Chainlink CCIP](https://chain.link/cross-chain).
 
