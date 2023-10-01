@@ -77,7 +77,7 @@ export default function MainNav() {
             />
           </a>
           <a
-            href="https://github.com/hackbg/chainlink-prediction-game"
+            href="https://github.com/smartcontractkit/prediction-game"
             target="_blank"
             rel="noreferrer"
             className="mt-4 flex items-center space-x-[8px] text-base font-bold leading-4 hover:underline hover:brightness-125"

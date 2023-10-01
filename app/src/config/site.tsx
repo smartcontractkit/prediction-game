@@ -1,8 +1,8 @@
 export const siteConfig = {
   name: 'Rugby Predictions',
   links: {
-    github: 'https://github.com/hackbg',
-    twitter: 'https://twitter.com/hackbg',
+    github: 'https://github.com/smartcontractkit/prediction-game',
+    twitter: 'https://twitter.com/chainlink',
   },
 }
 

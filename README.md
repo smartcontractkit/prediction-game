@@ -19,7 +19,7 @@ Additionally, the project showcases how to send automatic payouts using [Chainli
 Clone the repo:
 
 ```bash
-git clone https://github.com/hackbg/chainlink-prediction-game
+git clone https://github.com/smartcontractkit/prediction-game
 ```
 
 It contains two separate projects:
