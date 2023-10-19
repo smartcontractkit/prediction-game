@@ -2,6 +2,7 @@ import {
   fetchLeagueDetails,
   fetchCurrentGames,
   fetchTestGames,
+  fetchCurrentLeaguesIds,
 } from '@/lib/fetch-data'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import LeagueSection from '@/components/league-section'
@@ -14,8 +15,9 @@ export default async function Home({
 }: {
   searchParams: { [key: string]: string | string[] | undefined }
 }) {
+  const currentLeaguesIds = await fetchCurrentLeaguesIds(Sport.Rugby)
   const data = await Promise.all(
-    leagueIds[Sport.Rugby].map(async (leagueId) => {
+    currentLeaguesIds.map(async (leagueId) => {
       const league = leaguesData[leagueId]
         ? leaguesData[leagueId]
         : await fetchLeagueDetails(Sport.Rugby, leagueId)
@@ -54,9 +56,7 @@ export default async function Home({
                 <GameCard key={game.id} game={game} />
               ))}
             </LeagueSection>
-          ) : (
-            <div className="m-2 text-center">No games found</div>
-          )}
+          ) : null}
         </>
       ))}
     </ScrollArea>
