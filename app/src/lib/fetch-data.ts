@@ -3,7 +3,7 @@ import 'server-only'
 import { cache } from 'react'
 import { add, getUnixTime } from 'date-fns'
 import { currentGameStatuses, currentSeason } from '@/config/api'
-import { Sport, Game, League } from '@/types'
+import { Sport, Game, League, LeagueResponse } from '@/types'
 
 export const fetchCurrentGames = async (sport: Sport, leagueId: number) => {
   const games = await fetchGames(sport, leagueId, currentSeason)
@@ -105,6 +105,15 @@ const transformScore = (scores: any, sport: Sport) => {
     default:
       throw new Error(`Unknown sport ${sport}`)
   }
+}
+
+export const fetchCurrentLeaguesIds = async (sport: Sport) => {
+  const res = await fetchSportData(sport, '/leagues', new URLSearchParams())
+  const allLeagues: LeagueResponse[] = res.response
+  const currentLeagues = allLeagues.filter((league: LeagueResponse) =>
+    league.seasons.some((season) => season.current === true),
+  )
+  return currentLeagues.map((league) => league.id)
 }
 
 export const fetchLeagueDetails = async (sport: Sport, leagueId: number) => {

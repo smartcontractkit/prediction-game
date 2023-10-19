@@ -14,6 +14,10 @@ export type League = {
   season?: string
 }
 
+export type LeagueResponse = League & {
+  seasons: { current: boolean }[]
+}
+
 export type Game = {
   id: number
   date: Date
