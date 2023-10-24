@@ -108,7 +108,12 @@ const transformScore = (scores: any, sport: Sport) => {
 }
 
 export const fetchCurrentLeaguesIds = async (sport: Sport) => {
-  const res = await fetchSportData(sport, '/leagues', new URLSearchParams())
+  const res = await fetchSportData(
+    sport,
+    '/leagues',
+    new URLSearchParams(),
+    3600 * 24,
+  )
   const allLeagues: LeagueResponse[] = res.response
   const currentLeagues = allLeagues.filter((league: LeagueResponse) =>
     league.seasons.some((season) => season.current === true),
@@ -120,7 +125,7 @@ export const fetchLeagueDetails = async (sport: Sport, leagueId: number) => {
   const params = new URLSearchParams({
     id: leagueId.toString(),
   })
-  const res = await fetchSportData(sport, '/leagues', params)
+  const res = await fetchSportData(sport, '/leagues', params, 3600 * 24)
   const league = res.response[0]
 
   if (sport === Sport.Soccer) {
@@ -166,7 +171,12 @@ const baseUrls = {
 const apiKey = process.env.API_KEY || ''
 
 const fetchSportData = cache(
-  async (sport: Sport, path: string, params: URLSearchParams) => {
+  async (
+    sport: Sport,
+    path: string,
+    params: URLSearchParams,
+    revalidate = 3600,
+  ) => {
     const response = await fetch(
       `${baseUrls[sport]}${path}?${params.toString()}`,
       {
@@ -174,7 +184,7 @@ const fetchSportData = cache(
           'x-apisports-key': apiKey,
         },
         next: {
-          revalidate: 3600,
+          revalidate,
         },
       },
     )
