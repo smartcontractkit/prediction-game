@@ -64,9 +64,11 @@ contract NativeTokenReceiver is ProgrammableTokenReceiver {
   function _onTokenReceived(bytes32, bytes memory data, address tokenAddress, uint256 tokenAmount) internal override {
     if (tokenAddress != exchangeToken) revert InvalidTokenAddress(tokenAddress);
 
+    // Swap exchange token to native token
     address tokenRecipient = abi.decode(data, (address));
     uint256 nativeTokenAmount = _swapExchangeTokenToNative(tokenAmount);
 
+    // Transfer native token to the recipient
     (bool success, ) = tokenRecipient.call{value: nativeTokenAmount}("");
     if (!success) revert FailedToTransferNativeToken(tokenRecipient);
 
@@ -77,7 +79,9 @@ contract NativeTokenReceiver is ProgrammableTokenReceiver {
   /// @param _exchangeTokenAmount The amount of exchange token to swap
   /// @return nativeTokenAmount The amount of native token received
   function _swapExchangeTokenToNative(uint256 _exchangeTokenAmount) internal returns (uint256 nativeTokenAmount) {
+    // Approve the Uniswap V3 router to spend the exchange token
     TransferHelper.safeApprove(exchangeToken, uniswapV3Router, _exchangeTokenAmount);
+    // Swap the exchange token to wrapped native token
     ISwapRouter.ExactInputSingleParams memory params = ISwapRouter.ExactInputSingleParams({
       tokenIn: exchangeToken,
       tokenOut: weth9Token,
@@ -89,6 +93,7 @@ contract NativeTokenReceiver is ProgrammableTokenReceiver {
       sqrtPriceLimitX96: 0
     });
     nativeTokenAmount = ISwapRouter(uniswapV3Router).exactInputSingle(params);
+    // Swap the wrapped native token to native token
     IWETH9(weth9Token).withdraw(nativeTokenAmount);
   }
 

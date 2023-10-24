@@ -117,16 +117,19 @@ contract SportsPredictionGame is ResultsConsumer, NativeTokenSender, AutomationC
     Game memory game = games[gameId];
     uint256 wagerAmount = msg.value;
 
+    // Check if the prediction is valid
     if (game.externalId == 0) revert GameNotRegistered();
     if (game.resolved) revert GameIsResolved();
     if (game.timestamp < block.timestamp) revert GameAlreadyStarted();
     if (wagerAmount < MIN_WAGER) revert InsufficientValue();
     if (wagerAmount > MAX_WAGER) revert ValueTooHigh();
 
+    // Update the game pool amounts
     if (result == Result.Home) games[gameId].homeWagerAmount += wagerAmount;
     else if (result == Result.Away) games[gameId].awayWagerAmount += wagerAmount;
     else revert InvalidResult();
 
+    // Add the prediction to the user's list of predictions
     predictions[msg.sender][gameId].push(Prediction(gameId, result, wagerAmount, false));
     emit Predicted(msg.sender, gameId, result, wagerAmount);
   }
@@ -151,14 +154,18 @@ contract SportsPredictionGame is ResultsConsumer, NativeTokenSender, AutomationC
 
     if (!game.resolved) revert GameNotResolved();
 
+    // Calculate the total winnings and mark the predictions as claimed
     uint256 totalWinnings = 0;
     Prediction[] memory userPredictions = predictions[user][gameId];
     for (uint256 i = 0; i < userPredictions.length; i++) {
       Prediction memory prediction = userPredictions[i];
+      // Skip if the prediction has already been claimed
       if (prediction.claimed) continue;
       if (game.result == Result.None) {
+        // For a draw, the user gets their tokens back
         totalWinnings += prediction.amount;
       } else if (prediction.result == game.result) {
+        // Calculate the winnings for correct predictions
         uint256 winnings = calculateWinnings(gameId, prediction.amount, prediction.result);
         totalWinnings += winnings;
       }
@@ -167,9 +174,12 @@ contract SportsPredictionGame is ResultsConsumer, NativeTokenSender, AutomationC
 
     if (totalWinnings == 0) revert NothingToClaim();
 
+    // Claim winnings depending on the transfer parameter
     if (transfer) {
+      // Transfer the winnings to the user on the another chain
       _sendTransferRequest(user, totalWinnings);
     } else {
+      // Transfer the winnings to the user on the same chain
       payable(user).transfer(totalWinnings);
     }
 
@@ -186,10 +196,13 @@ contract SportsPredictionGame is ResultsConsumer, NativeTokenSender, AutomationC
   function _registerGame(uint256 sportId, uint256 externalId, uint256 timestamp) internal returns (uint256 gameId) {
     gameId = getGameId(sportId, externalId);
 
+    // Check if the game can be registered
     if (games[gameId].externalId != 0) revert GameAlreadyRegistered();
     if (timestamp < block.timestamp) revert TimestampInPast();
 
+    // Store the game data
     games[gameId] = Game(sportId, externalId, timestamp, 0, 0, false, Result.None);
+    // Add the game to the active games list
     activeGames.push(gameId);
 
     emit GameRegistered(gameId);
@@ -201,11 +214,14 @@ contract SportsPredictionGame is ResultsConsumer, NativeTokenSender, AutomationC
   function _requestResolve(uint256 gameId) internal {
     Game memory game = games[gameId];
 
+    // Check if the game can be resolved
     if (pendingRequests[gameId] != 0) revert ResolveAlreadyRequested();
     if (game.externalId == 0) revert GameNotRegistered();
     if (game.resolved) revert GameIsResolved();
     if (!readyToResolve(gameId)) revert GameNotReadyToResolve();
 
+    // Request the result of the game via ResultsConsumer contract
+    // Store the Chainlink Functions request ID to prevent duplicate requests
     pendingRequests[gameId] = _requestResult(game.sportId, game.externalId);
   }
 
@@ -225,9 +241,11 @@ contract SportsPredictionGame is ResultsConsumer, NativeTokenSender, AutomationC
   /// @param result The result of the game
   /// @dev Removes the game from the active games list
   function _resolveGame(uint256 gameId, Result result) internal {
+    // Store the game result and mark the game as finished
     games[gameId].result = result;
     games[gameId].resolved = true;
 
+    // Add the game to the finished games list
     resolvedGames.push(gameId);
     _removeFromActiveGames(gameId);
 
@@ -338,7 +356,9 @@ contract SportsPredictionGame is ResultsConsumer, NativeTokenSender, AutomationC
   /// @dev The game must be registered
   function calculateWinnings(uint256 gameId, uint256 wager, Result result) public view returns (uint256) {
     Game memory game = games[gameId];
+    // Calculate the total amount of tokens wagered on the game
     uint256 totalWager = game.homeWagerAmount + game.awayWagerAmount;
+    // Calculate the winnings based on the result and the total amount of tokens wagered
     uint256 winnings = (wager * totalWager) / (result == Result.Home ? game.homeWagerAmount : game.awayWagerAmount);
     return winnings;
   }
@@ -357,10 +377,13 @@ contract SportsPredictionGame is ResultsConsumer, NativeTokenSender, AutomationC
   /// @notice Check if any games are ready to be resolved
   /// @dev Called by Chainlink Automation to determine if a game result should be requested
   function checkUpkeep(bytes memory) public view override returns (bool, bytes memory) {
+    // Get all games that can be resolved
     Game[] memory activeGamesArray = getActiveGames();
+    // Check if any game is ready to be resolved and have not already been requested
     for (uint256 i = 0; i < activeGamesArray.length; i++) {
       uint256 gameId = getGameId(activeGamesArray[i].sportId, activeGamesArray[i].externalId);
       if (readyToResolve(gameId) && pendingRequests[gameId] == 0) {
+        // Signal that a game is ready to be resolved to Chainlink Automation
         return (true, abi.encodePacked(gameId));
       }
     }
