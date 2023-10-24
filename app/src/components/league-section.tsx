@@ -15,7 +15,7 @@ export default function LeagueSection({
           src={league.logo}
           width={116}
           height={116}
-          className="h-[116px] w-auto"
+          className="max-h-[116px] max-w-[116px] object-contain"
           alt={league.name ?? 'league-logo'}
         />
       </div>
