@@ -7,7 +7,7 @@ import {
 import { ScrollArea } from '@/components/ui/scroll-area'
 import LeagueSection from '@/components/league-section'
 import GameCard from '@/components/game-card'
-import { leaguesData, leagueIds, currentSeason } from '@/config/api'
+import { leaguesData, currentSeason } from '@/config/api'
 import { Sport, Game } from '@/types'
 
 export default async function Home({

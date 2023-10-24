@@ -1,4 +1,4 @@
-import { Sport, League, Winner } from '@/types'
+import { League, Winner } from '@/types'
 
 export const liveGameStatuses = ['1H', '2H', 'HT', 'ET', 'BT', 'PT']
 
@@ -9,10 +9,6 @@ export const currentSeason = new Date().getFullYear()
 export const winnerToResult = {
   [Winner.Home]: 1,
   [Winner.Away]: 2,
-}
-
-export const leagueIds = {
-  [Sport.Rugby]: [69],
 }
 
 export const leaguesData: {
