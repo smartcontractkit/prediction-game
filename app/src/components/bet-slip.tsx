@@ -1,12 +1,14 @@
 import { fetchGames } from '@/lib/fetch-data'
 import BetSlipList from '@/components/bet-slip-list'
-import { currentSeason, leagueIds } from '@/config/api'
+import { currentSeason } from '@/config/api'
 import { Sport } from '@/types'
+import { getLeaguesIds } from '@/lib/server-context'
 
 const BetSlip = async () => {
+  const leagueIds = getLeaguesIds()
   const games = (
     await Promise.all(
-      leagueIds[Sport.Rugby].map(async (leagueId) => {
+      leagueIds.map(async (leagueId) => {
         const games = await fetchGames(Sport.Rugby, leagueId, currentSeason)
         return games
       }),

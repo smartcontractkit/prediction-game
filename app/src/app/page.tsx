@@ -9,6 +9,7 @@ import LeagueSection from '@/components/league-section'
 import GameCard from '@/components/game-card'
 import { leaguesData, currentSeason } from '@/config/api'
 import { Sport, Game } from '@/types'
+import { setLeaguesIds } from '@/lib/server-context'
 
 export default async function Home({
   searchParams,
@@ -16,6 +17,7 @@ export default async function Home({
   searchParams: { [key: string]: string | string[] | undefined }
 }) {
   const currentLeaguesIds = await fetchCurrentLeaguesIds(Sport.Rugby)
+  setLeaguesIds(currentLeaguesIds)
   const data = await Promise.all(
     currentLeaguesIds.map(async (leagueId) => {
       const league = leaguesData[leagueId]
