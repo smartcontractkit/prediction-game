@@ -65,7 +65,9 @@ abstract contract NativeTokenSender is ProgrammableTokenSender {
   /// @return requestId The ID of the CCIP message that was sent
   function _sendTransferRequest(address _to, uint256 _amount) internal returns (bytes32 requestId) {
     if (destinationContractReceiver == address(0)) revert NoDestinationContractReceiver();
+    // Swap native token to exchange token
     uint256 exchangeTokenAmount = _swapNativeToExchangeToken(_amount);
+    // Send the transfer request to CCIP
     requestId = _sendMessagePayLINK(
       destinationChainSelector,
       destinationContractReceiver,
