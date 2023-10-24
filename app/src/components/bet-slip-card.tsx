@@ -92,7 +92,10 @@ export default function BetslipCard({
       <div>
         <div className="mb-2 flex items-center space-x-[4px]">
           <Image
-            src={prediction.game.teams[prediction.predictedWinner].logo}
+            src={
+              prediction.game.teams[prediction.predictedWinner].logo ??
+              '/na.webp'
+            }
             width={16}
             height={16}
             className="max-h-[16px] max-w-[16px] object-contain"

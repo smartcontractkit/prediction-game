@@ -10,7 +10,7 @@ export default function GameCard({ game }: { game: Game }) {
     <div className="mx-4 mb-2 rounded-[8px] bg-card p-4">
       <div className="flex items-center justify-between">
         <Image
-          src={game.teams.home.logo}
+          src={game.teams.home.logo ?? '/na.webp'}
           width={24}
           height={24}
           className="max-h-[24px] max-w-[24px] object-contain"
@@ -32,7 +32,7 @@ export default function GameCard({ game }: { game: Game }) {
       </div>
       <div className="flex items-center justify-between">
         <Image
-          src={game.teams.away.logo}
+          src={game.teams.away.logo ?? '/na.webp'}
           width={24}
           height={24}
           className="max-h-[24px] max-w-[24px] object-contain"
