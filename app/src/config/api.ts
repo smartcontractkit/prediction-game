@@ -6,6 +6,8 @@ export const currentGameStatuses = ['NS', ...liveGameStatuses]
 
 export const currentSeason = new Date().getFullYear()
 
+export const leaguesCountLimit = 5
+
 export const winnerToResult = {
   [Winner.Home]: 1,
   [Winner.Away]: 2,

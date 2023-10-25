@@ -2,7 +2,11 @@ import 'server-only'
 
 import { cache } from 'react'
 import { add, getUnixTime } from 'date-fns'
-import { currentGameStatuses, currentSeason } from '@/config/api'
+import {
+  currentGameStatuses,
+  currentSeason,
+  leaguesCountLimit,
+} from '@/config/api'
 import { Sport, Game, League, LeagueResponse } from '@/types'
 
 export const fetchCurrentGames = async (sport: Sport, leagueId: number) => {
@@ -118,7 +122,7 @@ export const fetchCurrentLeagues = async (sport: Sport) => {
   const currentLeagues = allLeagues.filter((league: LeagueResponse) =>
     league.seasons.some((season) => season.current === true),
   )
-  return currentLeagues
+  return currentLeagues.reverse().slice(0, leaguesCountLimit)
 }
 
 export const fetchLeagueDetails = async (sport: Sport, leagueId: number) => {
