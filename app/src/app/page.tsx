@@ -1,8 +1,7 @@
 import {
-  fetchLeagueDetails,
   fetchCurrentGames,
   fetchTestGames,
-  fetchCurrentLeaguesIds,
+  fetchCurrentLeagues,
 } from '@/lib/fetch-data'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import LeagueSection from '@/components/league-section'
@@ -16,19 +15,16 @@ export default async function Home({
 }: {
   searchParams: { [key: string]: string | string[] | undefined }
 }) {
-  const currentLeaguesIds = await fetchCurrentLeaguesIds(Sport.Rugby)
-  setLeaguesIds(currentLeaguesIds)
+  const currentLeagues = await fetchCurrentLeagues(Sport.Rugby)
+  setLeaguesIds(currentLeagues.map((l) => l.id))
   const data = await Promise.all(
-    currentLeaguesIds.map(async (leagueId) => {
-      const league = leaguesData[leagueId]
-        ? leaguesData[leagueId]
-        : await fetchLeagueDetails(Sport.Rugby, leagueId)
-      let allGames: Game[] = await fetchCurrentGames(Sport.Rugby, leagueId)
+    currentLeagues.map(async (league) => {
+      let allGames: Game[] = await fetchCurrentGames(Sport.Rugby, league.id)
       // todo: remove after implementing dummy games
       if (searchParams.mode === 'test') {
         const testGames = await fetchTestGames(
           Sport.Rugby,
-          leagueId,
+          league.id,
           currentSeason,
         )
         allGames = [...testGames, ...allGames]
@@ -44,7 +40,7 @@ export default async function Home({
                 .includes((searchParams.search as string).toLowerCase()),
           )
         : allGames
-      return { league, games }
+      return { league: leaguesData[league.id] || league, games }
     }),
   )
 

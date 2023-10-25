@@ -107,7 +107,7 @@ const transformScore = (scores: any, sport: Sport) => {
   }
 }
 
-export const fetchCurrentLeaguesIds = async (sport: Sport) => {
+export const fetchCurrentLeagues = async (sport: Sport) => {
   const res = await fetchSportData(
     sport,
     '/leagues',
@@ -118,7 +118,7 @@ export const fetchCurrentLeaguesIds = async (sport: Sport) => {
   const currentLeagues = allLeagues.filter((league: LeagueResponse) =>
     league.seasons.some((season) => season.current === true),
   )
-  return currentLeagues.map((league) => league.id)
+  return currentLeagues
 }
 
 export const fetchLeagueDetails = async (sport: Sport, leagueId: number) => {
