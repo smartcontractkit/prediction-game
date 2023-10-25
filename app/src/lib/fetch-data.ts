@@ -2,8 +2,12 @@ import 'server-only'
 
 import { cache } from 'react'
 import { add, getUnixTime } from 'date-fns'
-import { currentGameStatuses, currentSeason } from '@/config/api'
-import { Sport, Game, League } from '@/types'
+import {
+  currentGameStatuses,
+  currentSeason,
+  leaguesCountLimit,
+} from '@/config/api'
+import { Sport, Game, League, LeagueResponse } from '@/types'
 
 export const fetchCurrentGames = async (sport: Sport, leagueId: number) => {
   const games = await fetchGames(sport, leagueId, currentSeason)
@@ -107,11 +111,25 @@ const transformScore = (scores: any, sport: Sport) => {
   }
 }
 
+export const fetchCurrentLeagues = async (sport: Sport) => {
+  const res = await fetchSportData(
+    sport,
+    '/leagues',
+    new URLSearchParams(),
+    3600 * 24,
+  )
+  const allLeagues: LeagueResponse[] = res.response
+  const currentLeagues = allLeagues.filter((league: LeagueResponse) =>
+    league.seasons.some((season) => season.current === true),
+  )
+  return currentLeagues.reverse().slice(0, leaguesCountLimit)
+}
+
 export const fetchLeagueDetails = async (sport: Sport, leagueId: number) => {
   const params = new URLSearchParams({
     id: leagueId.toString(),
   })
-  const res = await fetchSportData(sport, '/leagues', params)
+  const res = await fetchSportData(sport, '/leagues', params, 3600 * 24)
   const league = res.response[0]
 
   if (sport === Sport.Soccer) {
@@ -157,7 +175,12 @@ const baseUrls = {
 const apiKey = process.env.API_KEY || ''
 
 const fetchSportData = cache(
-  async (sport: Sport, path: string, params: URLSearchParams) => {
+  async (
+    sport: Sport,
+    path: string,
+    params: URLSearchParams,
+    revalidate = 3600,
+  ) => {
     const response = await fetch(
       `${baseUrls[sport]}${path}?${params.toString()}`,
       {
@@ -165,7 +188,7 @@ const fetchSportData = cache(
           'x-apisports-key': apiKey,
         },
         next: {
-          revalidate: 3600,
+          revalidate,
         },
       },
     )

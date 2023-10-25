@@ -71,7 +71,7 @@ export default function BetCard({
                 <div className="mb-2 flex items-center justify-between font-[450] leading-4">
                   <div className="mb-2 flex items-center space-x-[4px]">
                     <Image
-                      src={game.teams[predictedWinner].logo}
+                      src={game.teams[predictedWinner].logo ?? '/na.webp'}
                       width={16}
                       height={16}
                       className="max-h-[16px] max-w-[16px] object-contain"

@@ -1,30 +1,30 @@
 import {
-  fetchLeagueDetails,
   fetchCurrentGames,
   fetchTestGames,
+  fetchCurrentLeagues,
 } from '@/lib/fetch-data'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import LeagueSection from '@/components/league-section'
 import GameCard from '@/components/game-card'
-import { leaguesData, leagueIds, currentSeason } from '@/config/api'
+import { leaguesData, currentSeason } from '@/config/api'
 import { Sport, Game } from '@/types'
+import { setLeaguesIds } from '@/lib/server-context'
 
 export default async function Home({
   searchParams,
 }: {
   searchParams: { [key: string]: string | string[] | undefined }
 }) {
+  const currentLeagues = await fetchCurrentLeagues(Sport.Rugby)
+  setLeaguesIds(currentLeagues.map((l) => l.id))
   const data = await Promise.all(
-    leagueIds[Sport.Rugby].map(async (leagueId) => {
-      const league = leaguesData[leagueId]
-        ? leaguesData[leagueId]
-        : await fetchLeagueDetails(Sport.Rugby, leagueId)
-      let allGames: Game[] = await fetchCurrentGames(Sport.Rugby, leagueId)
+    currentLeagues.map(async (league) => {
+      let allGames: Game[] = await fetchCurrentGames(Sport.Rugby, league.id)
       // todo: remove after implementing dummy games
       if (searchParams.mode === 'test') {
         const testGames = await fetchTestGames(
           Sport.Rugby,
-          leagueId,
+          league.id,
           currentSeason,
         )
         allGames = [...testGames, ...allGames]
@@ -40,7 +40,7 @@ export default async function Home({
                 .includes((searchParams.search as string).toLowerCase()),
           )
         : allGames
-      return { league, games }
+      return { league: leaguesData[league.id] || league, games }
     }),
   )
 
@@ -54,9 +54,7 @@ export default async function Home({
                 <GameCard key={game.id} game={game} />
               ))}
             </LeagueSection>
-          ) : (
-            <div className="m-2 text-center">No games found</div>
-          )}
+          ) : null}
         </>
       ))}
     </ScrollArea>
