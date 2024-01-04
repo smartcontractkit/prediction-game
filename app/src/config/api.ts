@@ -4,7 +4,10 @@ export const liveGameStatuses = ['1H', '2H', 'HT', 'ET', 'BT', 'PT']
 
 export const currentGameStatuses = ['NS', ...liveGameStatuses]
 
-export const currentSeason = new Date().getFullYear()
+const currentMonth = new Date().getMonth()
+
+export const currentSeason =
+  currentMonth < 6 ? new Date().getFullYear() - 1 : new Date().getFullYear()
 
 export const leaguesCountLimit = 5
 

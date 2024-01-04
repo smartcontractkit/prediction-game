@@ -5,7 +5,7 @@ module.exports = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'media-?.api-sports.io',
+        hostname: 'media*.api-sports.io',
       },
     ],
   },
