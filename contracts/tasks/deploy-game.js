@@ -1,26 +1,55 @@
-const { networks } = require("../networks")
-const { addClientConsumerToSubscription } = require("./Functions-billing/add")
-const { getRequestConfig } = require("../FunctionsSandboxLibrary")
-const { generateRequest } = require("./Functions-client/buildRequestJSON")
 const path = require("path")
 const process = require("process")
+const { networks } = require("../networks")
+const { SubscriptionManager, SecretsManager, createGist } = require("@chainlink/functions-toolkit")
+
+const generateEncryptedGist = async (secrets, githubApiToken, networkConfig) => {
+  const provider = new ethers.providers.JsonRpcProvider(networkConfig.url)
+  const signer = new ethers.Wallet(networkConfig.accounts[0], provider)
+
+  const secretsManager = new SecretsManager({
+    signer: signer,
+    functionsRouterAddress: networkConfig.functionsRouter,
+    donId: networkConfig.functionsDonId,
+  })
+  await secretsManager.initialize()
+
+  const encryptedSecretsObj = await secretsManager.encryptSecrets(secrets)
+
+  console.log(`Creating gist...`)
+  if (!githubApiToken) throw new Error("githubApiToken not provided - check your environment variables")
+
+  const gistURL = await createGist(githubApiToken, JSON.stringify(encryptedSecretsObj))
+  console.log(`Gist created ${gistURL}`)
+  const encryptedSecretsUrls = await secretsManager.encryptSecretsUrls([gistURL])
+
+  return encryptedSecretsUrls
+}
+
+const addConsumerToSubscription = async (subscriptionId, consumerAddress, networkConfig) => {
+  const provider = new ethers.providers.JsonRpcProvider(networkConfig.url)
+  const signer = new ethers.Wallet(networkConfig.accounts[0], provider)
+
+  const subscriptionManager = new SubscriptionManager({
+    signer,
+    linkTokenAddress: networkConfig.linkToken,
+    functionsRouterAddress: networkConfig.functionsRouter,
+  })
+  await subscriptionManager.initialize()
+
+  const addConsumerTxReceipt = await subscriptionManager.addConsumer({
+    subscriptionId,
+    consumerAddress,
+  })
+  console.log(`\nConsumer added to Functions subscription ${subscriptionId}`)
+
+  return addConsumerTxReceipt
+}
 
 task("deploy-game", "Deploys the SportsPredictionGame contract")
   .addParam("subid", "Billing subscription ID used to pay for Functions requests")
   .addParam("destination", "Destination chain for winnings transfer", "avalancheFuji")
   .addOptionalParam("verify", "Set to true to verify client contract", false, types.boolean)
-  .addOptionalParam(
-    "gaslimit",
-    "Maximum amount of gas that can be used to call fulfillRequest in the client contract",
-    250000,
-    types.int
-  )
-  .addOptionalParam(
-    "simulate",
-    "Flag indicating if simulation should be run before making an on-chain request",
-    true,
-    types.boolean
-  )
   .addOptionalParam(
     "configpath",
     "Path to Functions request config file",
@@ -34,10 +63,6 @@ task("deploy-game", "Deploys the SportsPredictionGame contract")
       )
     }
 
-    if (taskArgs.gaslimit > 300000) {
-      throw Error("Gas limit must be less than or equal to 300,000")
-    }
-
     console.log(`Deploying SportsPredictionGame contract to ${network.name}`)
 
     console.log("\n__Compiling Contracts__")
@@ -47,14 +72,21 @@ task("deploy-game", "Deploys the SportsPredictionGame contract")
     const networkConfig = networks[network.name]
     const destinationChainConfig = networks[destinationChain]
 
-    const unvalidatedRequestConfig = require(path.isAbsolute(taskArgs.configpath)
+    const requestConfig = require(path.isAbsolute(taskArgs.configpath)
       ? taskArgs.configpath
       : path.join(process.cwd(), taskArgs.configpath))
-    const requestConfig = getRequestConfig(unvalidatedRequestConfig)
-    const request = await generateRequest(requestConfig, taskArgs)
+
+    const encryptedSecrets = await generateEncryptedGist(
+      requestConfig.secrets,
+      process.env.GITHUB_API_TOKEN,
+      networkConfig
+    )
+
+    const donIdBytes32 = ethers.utils.formatBytes32String(networkConfig.functionsDonId)
 
     const deployParams = {
-      oracle: networkConfig["functionsOracleProxy"],
+      oracle: networkConfig.functionsRouter,
+      donId: donIdBytes32,
       ccipRouter: networkConfig.ccipRouter,
       link: networkConfig.linkToken,
       weth9Token: networkConfig.weth9,
@@ -62,17 +94,16 @@ task("deploy-game", "Deploys the SportsPredictionGame contract")
       uniswapV3Router: networkConfig.uniswapV3Router,
       destinationChainSelector: destinationChainConfig.ccipChainSelector,
       subscriptionId: taskArgs.subid,
-      gasLimit: taskArgs.gaslimit,
-      secrets: request.secrets,
-      source: request.source,
+      secrets: encryptedSecrets,
+      source: requestConfig.source,
     }
 
     const gameContractFactory = await ethers.getContractFactory("SportsPredictionGame")
     const gameContract = await gameContractFactory.deploy(deployParams)
 
-    console.log(`\SportsPredictionGame contract deployed to ${gameContract.address} on ${network.name}`)
+    console.log(`\nSportsPredictionGame contract deployed to ${gameContract.address} on ${network.name}`)
 
-    await addClientConsumerToSubscription(taskArgs.subid, gameContract.address)
+    await addConsumerToSubscription(taskArgs.subid, gameContract.address, networkConfig)
 
     console.log(`\nDeploying NativeTokenReceiver contract to ${destinationChain}`)
 

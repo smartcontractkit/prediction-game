@@ -21,6 +21,10 @@ module.exports = {
   solidity: {
     compilers: [
       {
+        version: "0.8.19",
+        settings: SOLC_SETTINGS,
+      },
+      {
         version: "0.8.7",
         settings: SOLC_SETTINGS,
       },
@@ -64,10 +68,6 @@ module.exports = {
     currency: "USD",
     outputFile: "gas-report.txt",
     noColors: true,
-  },
-  contractSizer: {
-    runOnCompile: false,
-    only: ["FunctionsConsumer", "AutomatedFunctionsConsumer", "FunctionsBillingRegistry"],
   },
   paths: {
     sources: "./contracts",

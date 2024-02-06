@@ -5,11 +5,7 @@
   "description": "Tooling for interacting with Chainlink Functions",
   "scripts": {
     "compile": "hardhat compile",
-    "test": "npm run test:unit",
-    "test:unit": "hardhat test test/unit/*.spec.js",
-    "test:integration": "hardhat test test/integration/*.spec.js",
-    "functions-simulate-javascript": "node scripts/simulateFunctionsJavaScript.js",
-    "functions-gen-keys": "node scripts/generateKeypair.js",
+    "test": "hardhat test",
     "lint": "npm run lint:contracts && npm run format:check",
     "lint:fix": "solhint 'contracts/**/*.sol' --fix",
     "lint:contracts": "solhint 'contracts/*.sol'",
@@ -18,8 +14,9 @@
     "format:fix": "prettier --write ."
   },
   "devDependencies": {
-    "@chainlink/contracts": "0.5.1",
+    "@chainlink/contracts": "0.7.1",
     "@chainlink/contracts-ccip": "^0.7.6",
+    "@chainlink/functions-toolkit": "^0.2.8",
     "@ethersproject/abi": "^5.7.0",
     "@ethersproject/providers": "^5.7.1",
     "@nomicfoundation/hardhat-chai-matchers": "^1.0.3",

@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.7;
+pragma solidity ^0.8.0;
 
 import {ResultsConsumer} from "./ResultsConsumer.sol";
 import {NativeTokenSender} from "./ccip/NativeTokenSender.sol";
-import {AutomationCompatibleInterface} from "@chainlink/contracts/src/v0.8/AutomationCompatible.sol";
+import {AutomationCompatibleInterface} from "@chainlink/contracts/src/v0.8/automation/interfaces/AutomationCompatibleInterface.sol";
 
 // Configuration parameters for initializing the contract
 struct Config {
@@ -15,7 +15,7 @@ struct Config {
   address uniswapV3Router; // The address of the Uniswap V3 router
   uint64 subscriptionId; // The ID of the Chainlink Functions subscription
   uint64 destinationChainSelector; // The chain selector for the winnings transfer destination chain
-  uint32 gasLimit; // The gas limit for the Chainlink Functions request callback
+  bytes32 donId; // The ID of the Chainlink oracle network
   bytes secrets; // The secrets for the Chainlink Functions request
   string source; // The source code for the Chainlink Functions request
 }
@@ -96,7 +96,7 @@ contract SportsPredictionGame is ResultsConsumer, NativeTokenSender, AutomationC
   constructor(
     Config memory config
   )
-    ResultsConsumer(config.oracle, config.subscriptionId, config.source, config.secrets, config.gasLimit)
+    ResultsConsumer(config.oracle, config.donId, config.subscriptionId, config.source, config.secrets)
     NativeTokenSender(
       config.ccipRouter,
       config.link,
