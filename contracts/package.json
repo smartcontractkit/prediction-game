@@ -15,7 +15,7 @@
   },
   "devDependencies": {
     "@chainlink/contracts": "0.7.1",
-    "@chainlink/contracts-ccip": "^0.7.6",
+    "@chainlink/contracts-ccip": "^1.2.1",
     "@chainlink/functions-toolkit": "^0.2.8",
     "@ethersproject/abi": "^5.7.0",
     "@ethersproject/providers": "^5.7.1",
