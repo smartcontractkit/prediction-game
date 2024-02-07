@@ -45,7 +45,16 @@ All required configuration for supported networks is located in the [`networks.j
       - Your wallet has a sufficient native token balance on both networks for the deployment and transaction fees.
       - Yoyr wallet LINK balance is sufficient to fund the contract so it can pay the CCIP transfer fees. The amount is specified in the `networks.js` file under each network `fundAmount` property.
       - `<explorer>_API_KEY` is set if using `--verify true`, depending on which network is used.<br><br>
-8.  In order for the registered games in the contract to be updated with results from the sports API automatically, the game contract must be registered as an upkeep. Follow the steps at https://automation.chain.link/new.<br>**Note**: Make sure the gas limit is set to 1,000,000.<br><br>
+8.  In order for the registered games in the contract to be updated with results from the sports API automatically, the game contract must be registered as an upkeep. Follow the steps at [https://automation.chain.link](https://automation.chain.link).<br>**Note**: Make sure the gas limit is set to 1,000,000.<br><br>
+
+## Deployments
+
+Polygon Mumbai
+
+- Game contract: [`0x837acF842c9D99004A4b4fa1C250Fe3ca0c3ce63`](https://mumbai.polygonscan.com/address/0x837acF842c9D99004A4b4fa1C250Fe3ca0c3ce63)
+- Functions subscription: [`1328`](https://functions.chain.link/mumbai/1328)
+- Automation upkeep: [`108769264368126231420985110258970292714464487200997462556194899554304873592241`](https://automation.chain.link/mumbai/108769264368126231420985110258970292714464487200997462556194899554304873592241)
+- CCIP Token Receiver contract on Avalanche Fuji: [`0x812F700f90348E4b297ED8818CBda1ddCf7F25eC`](https://testnet.snowtrace.io/address/0x812F700f90348E4b297ED8818CBda1ddCf7F25eC)
 
 ---
 
