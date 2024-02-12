@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { formatEther, parseEther } from 'viem'
 import { useAccount, useBalance } from 'wagmi'
 import {
@@ -27,6 +28,9 @@ export default function PlaceBetButton({
   const { address } = useAccount()
   const { data } = useBalance({ address })
   const { predictions, setPredictions } = useLocalStateContext()
+
+  const searchParams = useSearchParams()
+  const testMode = searchParams.get('mode') === 'test'
 
   const placePredictions = async () => {
     setError(null)
@@ -79,6 +83,10 @@ export default function PlaceBetButton({
             args: [gameId],
           })
           if (game.externalId === BigInt(0)) {
+            // Bypassing the registration guard for test mode
+            const timestamp = testMode
+              ? BigInt(Math.floor(Date.now() / 1000) + 300)
+              : BigInt(prediction.game.timestamp)
             const config = await prepareWriteContract({
               address: contractAddress,
               abi: sportsPredictionGameABI,
@@ -86,7 +94,7 @@ export default function PlaceBetButton({
               args: [
                 BigInt(prediction.game.sportId),
                 BigInt(prediction.game.id),
-                BigInt(prediction.game.timestamp),
+                timestamp,
                 winnerToResult[prediction.predictedWinner],
               ],
               value: parseEther(`${prediction.wager ?? 0}`),

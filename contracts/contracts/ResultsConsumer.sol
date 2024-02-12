@@ -1,13 +1,17 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.7;
+pragma solidity ^0.8.0;
 
-import {Functions, FunctionsClient} from "./dev/functions/FunctionsClient.sol";
+import {FunctionsClient} from "@chainlink/contracts/src/v0.8/functions/dev/v1_0_0/FunctionsClient.sol";
+import {FunctionsRequest} from "@chainlink/contracts/src/v0.8/functions/dev/v1_0_0/libraries/FunctionsRequest.sol";
 import {Strings} from "@openzeppelin/contracts/utils/Strings.sol";
 
 /// @title ResultsConsumer
 /// @notice Requests and receives sports results using Chainlink Functions
 abstract contract ResultsConsumer is FunctionsClient {
-  using Functions for Functions.Request;
+  using FunctionsRequest for FunctionsRequest.Request;
+
+  /// @notice The gas limit for the sports API request callback
+  uint32 private constant GAS_LIMIT = 250000;
 
   /// @notice The source code for the sports API request
   string private source;
@@ -15,8 +19,8 @@ abstract contract ResultsConsumer is FunctionsClient {
   bytes private secrets;
   /// @notice The subscription ID for Chainlink Functions
   uint64 private subscriptionId;
-  /// @notice The gas limit for the sports API request callback
-  uint32 private gasLimit;
+  /// @notice The ID of the Chainlink oracle network
+  bytes32 public donId;
 
   /// @notice The pending Functions requests
   mapping(bytes32 => PendingRequest) private pending;
@@ -39,21 +43,21 @@ abstract contract ResultsConsumer is FunctionsClient {
 
   /// @notice Initializes the contract
   /// @param _oracle The address of the Chainlink Function oracle
+  /// @param _donId The ID of the Chainlink oracle network
   /// @param _subscriptionId The subscription ID for Chainlink Functions
   /// @param _source The source code for the Chainlink Functions request
   /// @param _secrets The secrets used in the Chainlink Functions request
-  /// @param _gasLimit The gas limit for the Chainlink Functions request callback
   constructor(
     address _oracle,
+    bytes32 _donId,
     uint64 _subscriptionId,
     string memory _source,
-    bytes memory _secrets,
-    uint32 _gasLimit
+    bytes memory _secrets
   ) FunctionsClient(_oracle) {
+    donId = _donId;
     subscriptionId = _subscriptionId;
     source = _source;
     secrets = _secrets;
-    gasLimit = _gasLimit;
   }
 
   // INTERNAL
@@ -79,13 +83,13 @@ abstract contract ResultsConsumer is FunctionsClient {
   /// @param args The arguments for the Chainlink Functions request
   /// @return requestId The Chainlink Functions request ID
   function _executeRequest(string[] memory args) internal returns (bytes32 requestId) {
-    Functions.Request memory req;
-    req.initializeRequest(Functions.Location.Inline, Functions.CodeLanguage.JavaScript, source);
+    FunctionsRequest.Request memory req;
+    req.initializeRequest(FunctionsRequest.Location.Inline, FunctionsRequest.CodeLanguage.JavaScript, source);
     if (secrets.length > 0) {
-      req.addRemoteSecrets(secrets);
+      req.addSecretsReference(secrets);
     }
-    if (args.length > 0) req.addArgs(args);
-    requestId = sendRequest(req, subscriptionId, gasLimit);
+    if (args.length > 0) req.setArgs(args);
+    requestId = _sendRequest(req.encodeCBOR(), subscriptionId, GAS_LIMIT, donId);
   }
 
   /// @notice Processes the result of a sports API request

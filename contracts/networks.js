@@ -7,8 +7,6 @@
 require("@chainlink/env-enc").config()
 
 const DEFAULT_VERIFICATION_BLOCK_CONFIRMATIONS = 2
-const SHARED_DON_PUBLIC_KEY =
-  "a30264e813edc9927f73e036b7885ee25445b836979cb00ef112bc644bd16de2db866fa74648438b34f52bb196ffa386992e94e0a3dc6913cee52e2e98f1619c"
 
 const npmCommand = process.env.npm_lifecycle_event
 const isTestEnvironment = npmCommand == "test" || npmCommand == "test:unit"
@@ -30,9 +28,8 @@ const networks = {
     nativeCurrencySymbol: "ETH",
     linkToken: "0x779877A7B0D9E8603169DdbD7836e478b4624789",
     linkPriceFeed: "0x42585eD362B3f1BCa95c640FdFf35Ef899212734",
-    functionsOracleProxy: "0x649a2C205BE7A3d5e99206CEEFF30c794f0E31EC",
-    functionsBillingRegistryProxy: "0x3c79f56407DCB9dc9b852D139a317246f43750Cc",
-    functionsPublicKey: SHARED_DON_PUBLIC_KEY,
+    functionsRouter: "0xb83E47C2bC239B3bf370bc41e1459A34b41238D0",
+    functionsDonId: "fun-ethereum-sepolia-1",
   },
   polygonMumbai: {
     url: process.env.POLYGON_MUMBAI_RPC_URL || "UNSET",
@@ -44,10 +41,9 @@ const networks = {
     nativeCurrencySymbol: "MATIC",
     linkToken: "0x326C977E6efc84E512bB9C30f76E30c160eD06FB",
     linkPriceFeed: "0x12162c3E810393dEC01362aBf156D7ecf6159528", // LINK/MATIC
-    functionsOracleProxy: "0xeA6721aC65BCeD841B8ec3fc5fEdeA6141a0aDE4",
-    functionsBillingRegistryProxy: "0xEe9Bf52E5Ea228404bB54BCFbbDa8c21131b9039",
-    functionsPublicKey: SHARED_DON_PUBLIC_KEY,
-    ccipRouter: "0x70499c328e1E2a3c41108bd3730F6670a44595D1",
+    functionsRouter: '0x6E2dc0F9DB014aE19888F539E59285D2Ea04244C',
+    functionsDonId: 'fun-polygon-mumbai-1',
+    ccipRouter: "0x1035CabC275068e0F4b745A29CEDf38E13aF41b1",
     ccipChainSelector: "12532609583862916517",
     ccipTestToken: "0xf1E3A5842EeEF51F2967b3F05D45DD4f4205FF40",
     uniswapV3Router: "0xE592427A0AEce92De3Edee1F18E0157C05861564",
@@ -64,10 +60,9 @@ const networks = {
     nativeCurrencySymbol: "AVAX",
     linkToken: "0x0b9d5D9136855f6FEc3c0993feE6E9CE8a297846",
     linkPriceFeed: "0x79c91fd4F8b3DaBEe17d286EB11cEE4D83521775", // LINK/AVAX
-    functionsOracleProxy: "0xE569061eD8244643169e81293b0aA0d3335fD563",
-    functionsBillingRegistryProxy: "0x452C33Cef9Bc773267Ac5F8D85c1Aca2bA4bcf0C",
-    functionsPublicKey: SHARED_DON_PUBLIC_KEY,
-    ccipRouter: "0x554472a2720E5E7D5D3C817529aBA05EEd5F82D8",
+    functionsRouter: "0xA9d587a00A31A52Ed70D6026794a8FC5E2F5dCb0",
+    functionsDonId: "fun-avalanche-fuji-1",
+    ccipRouter: "0xF694E193200268f9a4868e4Aa017A0118C9a8177",
     ccipChainSelector: "14767482510784806043",
     ccipTestToken: "0xD21341536c5cF5EB1bcb58f6723cE26e8D8E90e4",
     uniswapV3Router: "0x6EE6e170636Aee203a4079498361936984ea64B3",
@@ -78,5 +73,4 @@ const networks = {
 
 module.exports = {
   networks,
-  SHARED_DON_PUBLIC_KEY,
 }

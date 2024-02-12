@@ -63,7 +63,7 @@ describe("SportsPredictionGame Unit Tests", async function () {
       uniswapV3Router: mockSwapRouter.address,
       subscriptionId: 123,
       destinationChainSelector,
-      gasLimit: 3000000,
+      donId: ethers.utils.hexZeroPad(ethers.utils.hexlify(1), 32),
       secrets: ethers.constants.HashZero,
       source: "...",
     })
