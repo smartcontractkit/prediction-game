@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.7;
+pragma solidity ^0.8.0;
 
 import {IRouterClient} from "@chainlink/contracts-ccip/src/v0.8/ccip/interfaces/IRouterClient.sol";
 import {OwnerIsCreator} from "@chainlink/contracts-ccip/src/v0.8/shared/access/OwnerIsCreator.sol";
 import {Client} from "@chainlink/contracts-ccip/src/v0.8/ccip/libraries/Client.sol";
-import {IERC20} from "@chainlink/contracts-ccip/src/v0.8/vendor/openzeppelin-solidity/v4.8.0/token/ERC20/IERC20.sol";
-import {LinkTokenInterface} from "@chainlink/contracts/src/v0.8/interfaces/LinkTokenInterface.sol";
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {LinkTokenInterface} from "@chainlink/contracts/src/v0.8/shared/interfaces/LinkTokenInterface.sol";
 
 /// @title ProgrammableTokenSender
 abstract contract ProgrammableTokenSender is OwnerIsCreator {
@@ -137,7 +137,7 @@ abstract contract ProgrammableTokenSender is OwnerIsCreator {
       tokenAmounts: tokenAmounts, // The amount and type of token being transferred
       extraArgs: Client._argsToBytes(
         // Additional arguments, setting gas limit and non-strict sequencing mode
-        Client.EVMExtraArgsV1({gasLimit: 500_000, strict: false})
+        Client.EVMExtraArgsV1({gasLimit: 500_000})
       ),
       // Set the feeToken to a feeTokenAddress, indicating specific asset will be used for fees
       feeToken: _feeTokenAddress
