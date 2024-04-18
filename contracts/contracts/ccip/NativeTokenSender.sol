@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 
 import {ProgrammableTokenSender} from "./ProgrammableTokenSender.sol";
-import {ISwapRouter} from "@uniswap/v3-periphery/contracts/interfaces/ISwapRouter.sol";
+import {IV3SwapRouter} from "../interfaces/IV3SwapRouter.sol";
 
 /// @title NativeTokenSender
 /// @notice Sends native token transfer request to another chain
@@ -82,17 +82,16 @@ abstract contract NativeTokenSender is ProgrammableTokenSender {
   /// @param _nativeTokenAmount The amount of native token to swap
   /// @return exchangeTokenAmount The amount of exchange token received
   function _swapNativeToExchangeToken(uint256 _nativeTokenAmount) internal returns (uint256 exchangeTokenAmount) {
-    ISwapRouter.ExactInputSingleParams memory params = ISwapRouter.ExactInputSingleParams({
+    IV3SwapRouter.ExactInputSingleParams memory params = IV3SwapRouter.ExactInputSingleParams({
       tokenIn: weth9Token,
       tokenOut: exchangeToken,
       fee: POOL_FEE,
       recipient: address(this),
-      deadline: block.timestamp,
       amountIn: _nativeTokenAmount,
       amountOutMinimum: 0,
       sqrtPriceLimitX96: 0
     });
-    exchangeTokenAmount = ISwapRouter(uniswapV3Router).exactInputSingle{value: _nativeTokenAmount}(params);
+    exchangeTokenAmount = IV3SwapRouter(uniswapV3Router).exactInputSingle{value: _nativeTokenAmount}(params);
   }
 
   // OWNER
