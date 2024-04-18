@@ -125,10 +125,10 @@ export default function BetslipCard({
                     <FormControl>
                       <div className="flex space-x-[8px] rounded-[8px] bg-secondary px-4 py-3">
                         <Image
-                          src="/matic.svg"
+                          src="/optimism.svg"
                           width={16}
                           height={16}
-                          alt="matic"
+                          alt="optimism"
                         />
                         <Input
                           disabled={isLoading}
@@ -158,10 +158,10 @@ export default function BetslipCard({
                     <FormControl>
                       <div className="flex space-x-[8px] rounded-[8px] bg-secondary px-4 py-3">
                         <Image
-                          src="/matic.svg"
+                          src="/optimism.svg"
                           width={16}
                           height={16}
-                          alt="matic"
+                          alt="optimism"
                         />
                         <Input
                           disabled
