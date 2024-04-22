@@ -144,7 +144,7 @@ const ClaimButton = ({
                 <DialogDescription className="font-[450] text-muted-foreground">
                   {`You are transferring ${formatEther(
                     calculatedWinnings,
-                  )} MATIC from Polygon Mumbai to Avalanche Fuji.`}
+                  )} ETH from Optimism Sepolia to Avalanche Fuji.`}
                 </DialogDescription>
               </DialogHeader>
               <div className="flex w-full items-end space-x-4">
@@ -152,14 +152,14 @@ const ClaimButton = ({
                   <span className="mb-4 text-[14px] leading-4">From</span>
                   <div className="flex items-center space-x-[8px] rounded-[8px] bg-primary px-4 py-3">
                     <Image
-                      src="/matic.svg"
+                      src="/optimism.svg"
                       width={24}
                       height={24}
-                      alt="matic"
+                      alt="optimism"
                     />
                     <div className="text-sm font-[450] leading-4">{`${formatEther(
                       calculatedWinnings,
-                    )} MATIC`}</div>
+                    )} ETH`}</div>
                   </div>
                 </div>
                 <Image

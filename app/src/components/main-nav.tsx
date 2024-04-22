@@ -53,7 +53,7 @@ export default function MainNav() {
               </AccordionTrigger>
               <AccordionContent>
                 <p className="text-secondary-foreground">
-                  Built on top of Polygon testnet and Chainlink, this dApp
+                  Built on top of Optimism Sepolia testnet and Chainlink, this dApp
                   enables users to interact with real time sport data, receive
                   automatic payouts, and transfer tokens across chains.
                 </p>
@@ -62,13 +62,13 @@ export default function MainNav() {
           </Accordion>
 
           <a
-            href="https://faucet.polygon.technology"
+            href="https://faucets.chain.link/optimism-sepolia"
             target="_blank"
             rel="noreferrer"
             className="mt-4 flex items-center space-x-[8px] text-base font-bold leading-4 hover:underline hover:brightness-125"
           >
-            <Image src="/polygon.svg" width={16} height={16} alt="polygon" />
-            <span>Get testnet MATIC</span>
+            <Image src="/optimism.svg" width={16} height={16} alt="optimism" />
+            <span>Get testnet ETH</span>
             <Image
               src="/external-link.svg"
               width={12}

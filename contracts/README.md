@@ -30,7 +30,7 @@ All required configuration for supported networks is located in the [`networks.j
     2. Use the command `npx env-enc set` to set the required environment variables (see [Environment Variable Management](#environment-variable-management)):
        - _GITHUB_API_TOKEN_ for your Github token obtained from step 3
        - _PRIVATE_KEY_ for your development wallet
-       - _POLYGON_MUMBAI_RPC_URL_, _ETHEREUM_SEPOLIA_RPC_URL_, _AVALANCHE_FUJI_RPC_URL_ for the network that you intend to use
+       - _OPTIMISM_SEPOLIA_RPC_URL_, _AVALANCHE_FUJI_RPC_URL_ for the network that you intend to use
        - _API_KEY_ for the sports results API. Obtain one [here](https://dashboard.api-football.com/register).
     3. If desired, the `<explorer>_API_KEY` can be set in order to verify contracts, along with any values used in the _secrets_ object in _Functions-request-config.js_ such as `COINMARKETCAP_API_KEY`.<br><br>
 4.  Test an end-to-end request and fulfillment locally by simulating it using:<br>`npx hardhat functions-simulate`<br><br>
@@ -45,11 +45,18 @@ All required configuration for supported networks is located in the [`networks.j
       - Your wallet has a sufficient native token balance on both networks for the deployment and transaction fees.
       - Yoyr wallet LINK balance is sufficient to fund the contract so it can pay the CCIP transfer fees. The amount is specified in the `networks.js` file under each network `fundAmount` property.
       - `<explorer>_API_KEY` is set if using `--verify true`, depending on which network is used.<br><br>
-8.  In order for the registered games in the contract to be updated with results from the sports API automatically, the game contract must be registered as an upkeep. Follow the steps at [https://automation.chain.link](https://automation.chain.link).<br>**Note**: Make sure the gas limit is set to 1,000,000.<br><br>
+8.  In order for the registered games in the contract to be updated with results from the sports API automatically, the game contract must be registered as an upkeep. Follow the steps at [https://automation.chain.link](https://automation.chain.link).<br>**Note**: Make sure the gas limit is set to 3,000,000.<br><br>
 
 ## Deployments
 
-Polygon Mumbai
+Optimism Sepolia
+
+- Game contract: [`0x31015944A2719Da19531Ced7ed72e9DD6761A478`](https://sepolia-optimism.etherscan.io/address/0x31015944A2719Da19531Ced7ed72e9DD6761A478)
+- Functions subscription: [`177`](https://functions.chain.link/optimism-sepolia/177)
+- Automation upkeep: [`112557321685295299629771618321084972343709241235617405730580214266603599595202`](https://automation.chain.link/optimism-sepolia/112557321685295299629771618321084972343709241235617405730580214266603599595202)
+- CCIP Token Receiver contract on Avalanche Fuji: [`0xB9bb8BfD3540E44b8eAaC9d5Dfc31B9D8E898C03`](https://testnet.snowtrace.io/address/0xB9bb8BfD3540E44b8eAaC9d5Dfc31B9D8E898C03)
+
+Polygon Mumbai (Deprecated)
 
 - Game contract: [`0x837acF842c9D99004A4b4fa1C250Fe3ca0c3ce63`](https://mumbai.polygonscan.com/address/0x837acF842c9D99004A4b4fa1C250Fe3ca0c3ce63)
 - Functions subscription: [`1328`](https://functions.chain.link/mumbai/1328)
