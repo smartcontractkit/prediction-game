@@ -21,6 +21,18 @@ Set environment variables by copying `.env.example` to `.env` and filling in the
 
 Run `npm run dev` in your terminal, and then open [localhost:3000](http://localhost:3000) in your browser.
 
+## Docker
+
+Build image
+```bash
+docker build --tag f1rollingbets:latest --build-arg NEXT_PUBLIC_ALCHEMY_API_KEY=your_alchemy_key .
+```
+
+Run container
+```bash
+docker run -d -p 3000:3000 f1rollingbets:latest  
+```
+
 ## Tech Stack
 
 - [Next.js](https://nextjs.org/)
