@@ -15,7 +15,7 @@ npm install
 Set environment variables by copying `.env.example` to `.env` and filling in the values:
 
 - _NEXT_PUBLIC_ALCHEMY_API_KEY_ for the network you want to use. You can get one from [Alchemy](https://www.alchemy.com/).
-- _NEXT_PUBLIC_WALLET_CONNECT_ID_ for the wallet connector. You can get one from [WalletConnect](https://walletconnect.org/).
+- _NEXT_PUBLIC_WALLET_CONNECT_ID_ for the wallet connector. You can get one from [WalletConnect](https://walletconnect.org/) by going to [WalletConnect Cloud](https://cloud.walletconnect.com/sign-in).
 - _NEXT_PUBLIC_CONTRACT_ADDRESS_ for the deployed game contract address.
 - _API_KEY_ for the sports data API. Obtain one [here](https://dashboard.api-football.com/register).
 

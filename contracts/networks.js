@@ -52,7 +52,7 @@ const networks = {
   },
   optimismSepolia: {
     url: process.env.OPTIMISM_SEPOLIA_RPC_URL || "UNSET",
-    gasPrice: undefined,
+    gasPrice: 1_500_000, // for spikes and higher L2 prices.
     accounts: PRIVATE_KEY !== undefined ? [PRIVATE_KEY] : [],
     verifyApiKey: process.env.OP_ETHERSCAN_API_KEY || "UNSET",
     chainId: 11155420,
