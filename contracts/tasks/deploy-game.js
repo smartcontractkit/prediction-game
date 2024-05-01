@@ -99,7 +99,11 @@ task("deploy-game", "Deploys the SportsPredictionGame contract")
     }
 
     const gameContractFactory = await ethers.getContractFactory("SportsPredictionGame")
-    const gameContract = await gameContractFactory.deploy(deployParams)
+    const overrides = {
+      // L2s can require more gas or may produce "transaction underpriced: tip needed" errors.
+      gasPrice: networkConfig.gasPrice,
+    }
+    const gameContract = await gameContractFactory.deploy(deployParams, overrides)
 
     console.log(`\nSportsPredictionGame contract deployed to ${gameContract.address} on ${network.name}`)
 
