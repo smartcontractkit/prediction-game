@@ -45,12 +45,6 @@ module.exports = {
   networks: {
     hardhat: {
       allowUnlimitedContractSize: true,
-      accounts: process.env.PRIVATE_KEY && [
-        {
-          privateKey: process.env.PRIVATE_KEY,
-          balance: "10000000000000000000000",
-        },
-      ],
     },
     ...networks,
   },
