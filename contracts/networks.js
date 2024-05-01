@@ -31,25 +31,6 @@ const networks = {
     functionsRouter: "0xb83E47C2bC239B3bf370bc41e1459A34b41238D0",
     functionsDonId: "fun-ethereum-sepolia-1",
   },
-  polygonMumbai: {
-    url: process.env.POLYGON_MUMBAI_RPC_URL || "UNSET",
-    gasPrice: undefined,
-    accounts: PRIVATE_KEY !== undefined ? [PRIVATE_KEY] : [],
-    verifyApiKey: process.env.POLYGONSCAN_API_KEY || "UNSET",
-    chainId: 80001,
-    confirmations: DEFAULT_VERIFICATION_BLOCK_CONFIRMATIONS,
-    nativeCurrencySymbol: "MATIC",
-    linkToken: "0x326C977E6efc84E512bB9C30f76E30c160eD06FB",
-    linkPriceFeed: "0x12162c3E810393dEC01362aBf156D7ecf6159528", // LINK/MATIC
-    functionsRouter: "0x6E2dc0F9DB014aE19888F539E59285D2Ea04244C",
-    functionsDonId: "fun-polygon-mumbai-1",
-    ccipRouter: "0x1035CabC275068e0F4b745A29CEDf38E13aF41b1",
-    ccipChainSelector: "12532609583862916517",
-    ccipTestToken: "0xf1E3A5842EeEF51F2967b3F05D45DD4f4205FF40",
-    uniswapV3Router: "0xE592427A0AEce92De3Edee1F18E0157C05861564",
-    weth9: "0x9c3C9283D3e44854697Cd22D3Faa240Cfb032889",
-    fundAmount: "1", // 1 LINK
-  },
   optimismSepolia: {
     url: process.env.OPTIMISM_SEPOLIA_RPC_URL || "UNSET",
     gasPrice: undefined,

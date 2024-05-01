@@ -53,7 +53,6 @@ module.exports = {
     // to get exact network names: npx hardhat verify --list-networks
     apiKey: {
       sepolia: networks.ethereumSepolia.verifyApiKey,
-      polygonMumbai: networks.polygonMumbai.verifyApiKey,
       avalancheFujiTestnet: networks.avalancheFuji.verifyApiKey,
       optimismSepolia: networks.optimismSepolia.verifyApiKey,
     },
