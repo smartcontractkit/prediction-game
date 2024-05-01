@@ -13,7 +13,7 @@ Additionally, it contains the Chainlink Functions [script](./sports-api.js) exec
 
 ## Supported Networks
 
-- Polygon Mumbai
+- Optimism Sepolia
 - Avalanche Fuji
 
 All required configuration for supported networks is located in the [`networks.js`](./networks.js) file in the root of this repository.
@@ -37,9 +37,9 @@ All required configuration for supported networks is located in the [`networks.j
 5.  Run the unit tests by running:<br>`npx hardhat test`<br><br>
 6.  Before deploying the contract a new Functions billing subscription must be created and funded to be able to request sports results. You can do it from the Functions web interface at [https://functions.chain.link](https://functions.chain.link).<br><br>
 7.  Deploy and configure the game contract to an actual blockchain network by running:<br>`npx hardhat deploy-game --network network_name_here --destination network_name_here --subid your_sub_id --verify true`
-    - `network` is the network where the game contract will be deployed
+    - `network` is the network where the game contract will be deployed. It must match the names given in the `networks` object in `./networks.js`.
     - `destination` is the network where the winnings receiver contract will be deployed
-    - `subid` is the subscription ID used to pay for the request
+    - `subid` is the subscription ID used to pay for the request, created by you at functions.chain.link. Create this before you run the above command.
     - `verify` is an optional flag which can be set to `true` to verify the deployed contract code<br>
       **Note**: Before running the command, make sure that:
       - Your wallet has a sufficient native token balance on both networks for the deployment and transaction fees.
@@ -65,15 +65,18 @@ Polygon Mumbai (Deprecated)
 
 ---
 
-Content below is general knowkedge from [function-hardhat-starter-kit](https://github.com/smartcontractkit/functions-hardhat-starter-kit).
+Content below is general knowledge from [function-hardhat-starter-kit](https://github.com/smartcontractkit/functions-hardhat-starter-kit).
 
+- [Sports Prediction Game: Contracts](#sports-prediction-game-contracts)
+  - [Supported Networks](#supported-networks)
+  - [Steps](#steps)
+  - [Deployments](#deployments)
 - [Environment Variable Management](#environment-variable-management)
   - [Environment Variable Management Commands](#environment-variable-management-commands)
 - [Request Configuration](#request-configuration)
   - [JavaScript Code](#javascript-code)
     - [Functions Library](#functions-library)
   - [Off-chain Secrets](#off-chain-secrets)
-- [Automation Integration](#automation-integration)
 - [Gas Spikes](#gas-spikes)
 
 # Environment Variable Management
