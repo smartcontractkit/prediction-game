@@ -45,7 +45,7 @@ All required configuration for supported networks is located in the [`networks.j
       - Your wallet has a sufficient native token balance on both networks for the deployment and transaction fees.
       - Yoyr wallet LINK balance is sufficient to fund the contract so it can pay the CCIP transfer fees. The amount is specified in the `networks.js` file under each network `fundAmount` property.
       - `<explorer>_API_KEY` is set if using `--verify true`, depending on which network is used.<br><br>
-8.  In order for the registered games in the contract to be updated with results from the sports API automatically, the game contract must be registered as an upkeep. Follow the steps at [https://automation.chain.link](https://automation.chain.link).<br>**Note**: Make sure the gas limit is set to 3,000,000.<br><br>
+8.  In order for the registered games in the contract to be updated with results from the sports API automatically, the game contract must be registered as an upkeep with a custom logic trigger. Follow the steps at [https://automation.chain.link](https://automation.chain.link).<br>**Note**: Make sure the gas limit is set to 3,000,000.<br><br>
 
 ## Deployments
 
