@@ -40,12 +40,12 @@ export default function PlaceBetButton({
       return
     }
     if (predictions.some((p) => p.wager! < minWager)) {
-      setError(`Minimum bet amount is ${minWager} MATIC`)
+      setError(`Minimum bet amount is ${minWager} ETH`)
       setTimeout(() => setError(null), 3000)
       return
     }
     if (predictions.some((p) => p.wager! > maxWager)) {
-      setError(`Maximum bet amount is ${maxWager} MATIC`)
+      setError(`Maximum bet amount is ${maxWager} ETH`)
       setTimeout(() => setError(null), 3000)
       return
     }

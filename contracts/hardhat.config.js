@@ -45,12 +45,6 @@ module.exports = {
   networks: {
     hardhat: {
       allowUnlimitedContractSize: true,
-      accounts: process.env.PRIVATE_KEY && [
-        {
-          privateKey: process.env.PRIVATE_KEY,
-          balance: "10000000000000000000000",
-        },
-      ],
     },
     ...networks,
   },
@@ -59,9 +53,19 @@ module.exports = {
     // to get exact network names: npx hardhat verify --list-networks
     apiKey: {
       sepolia: networks.ethereumSepolia.verifyApiKey,
-      polygonMumbai: networks.polygonMumbai.verifyApiKey,
       avalancheFujiTestnet: networks.avalancheFuji.verifyApiKey,
+      optimismSepolia: networks.optimismSepolia.verifyApiKey,
     },
+    customChains: [
+      {
+        network: "optimismSepolia",
+        chainId: 11155420,
+        urls: {
+          apiURL: "https://api-sepolia-optimistic.etherscan.io/api",
+          browserURL: "https://sepolia-optimism.etherscan.io/",
+        },
+      },
+    ],
   },
   gasReporter: {
     enabled: REPORT_GAS,

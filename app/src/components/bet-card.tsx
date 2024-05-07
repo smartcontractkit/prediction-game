@@ -93,7 +93,7 @@ export default function BetCard({
                     <div className="flex items-center">
                       <p>{`${formatEther(
                         prediction.amount ?? BigInt(0),
-                      )} MATIC`}</p>
+                      )} ETH`}</p>
                     </div>
                   ) : gameData.resolved && isPredictionCorrect ? (
                     <div className="flex items-center">
@@ -105,7 +105,7 @@ export default function BetCard({
                       />
                       <p>{`+${formatEther(
                         calculatedWinnings ?? BigInt(0),
-                      )} MATIC`}</p>
+                      )} ETH`}</p>
                     </div>
                   ) : gameData.resolved && !isPredictionCorrect ? (
                     <div className="flex items-center">
@@ -117,7 +117,7 @@ export default function BetCard({
                       />
                       <p>{`-${formatEther(
                         prediction.amount ?? BigInt(0),
-                      )} MATIC`}</p>
+                      )} ETH`}</p>
                     </div>
                   ) : (
                     <div className="flex items-center">
@@ -129,7 +129,7 @@ export default function BetCard({
                       />
                       <p>{`+${formatEther(
                         calculatedWinnings ?? BigInt(0),
-                      )} MATIC`}</p>
+                      )} ETH`}</p>
                     </div>
                   )}
                 </div>
@@ -164,12 +164,12 @@ export default function BetCard({
           )}
           {txHash && (
             <a
-              href={`https://mumbai.polygonscan.com/tx/${txHash}`}
+              href={`https://sepolia-optimism.etherscan.io/tx/${txHash}`}
               target="_blank"
               rel="noreferrer"
             >
               <Button className="w-full border-2 border-border bg-background text-base font-medium leading-4 text-foreground hover:bg-background/90 hover:text-muted-foreground">
-                View Polygonscan
+                View Etherscan
               </Button>
             </a>
           )}
