@@ -29,7 +29,7 @@
     "date-fns": "^2.30.0",
     "ethereum-blockies": "^0.1.1",
     "lucide-react": "^0.220.0",
-    "next": "^13.4.0",
+    "next": "^16.0.10",
     "next-themes": "^0.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
